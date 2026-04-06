@@ -1,0 +1,120 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+body {
+    background-color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
+
+#game-container {
+    position: relative;
+    width: 1024px;
+    height: 576px;
+    background-color: #222;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 10;
+}
+
+.health-container {
+    width: 400px;
+    height: 30px;
+    border: 4px solid white;
+    background-color: #555;
+}
+
+.health-container.p1 {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.health-container.p2 {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.health-bar {
+    height: 100%;
+    transition: width 0.2s;
+    width: 100%;
+}
+
+.p1-color {
+    background-color: #3b82f6;
+}
+
+.p2-color {
+    background-color: #ef4444;
+}
+
+#timer {
+    background-color: #000;
+    border: 4px solid white;
+    width: 80px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+#end-game-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    pointer-events: none;
+}
+
+#end-message {
+    font-size: 40px;
+    color: white;
+    text-shadow: 4px 4px 0 #000;
+    margin-bottom: 20px;
+    display: none;
+}
+
+#restart-btn {
+    pointer-events: auto;
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #fff;
+    color: #000;
+    border: 4px solid #000;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+#restart-btn:hover {
+    background-color: #ccc;
+}
