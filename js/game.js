@@ -1,36 +1,64 @@
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const container = document.getElementById('game-container');
+const width = 1024;
+const height = 576;
 
-canvas.width = 1024;
-canvas.height = 576;
-ctx.imageSmoothingEnabled = false;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#1e1e24');
+
+// Camera
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+// Y is up, X is right, Z is towards the screen
+camera.position.set(512, 288, 800); 
+camera.lookAt(512, 288, 0);
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(width, height);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+// Lights
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(512, 1000, 500);
+dirLight.castShadow = true;
+dirLight.shadow.camera.left = -600;
+dirLight.shadow.camera.right = 600;
+dirLight.shadow.camera.top = 600;
+dirLight.shadow.camera.bottom = -600;
+scene.add(dirLight);
+
+// Ground
+const groundGeometry = new THREE.BoxGeometry(1024, 50, 200);
+const groundMaterial = new THREE.MeshLambertMaterial({ color: '#4a4e69' });
+const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+ground.position.set(512, 25, 0); // Ground top is at Y=50
+ground.receiveShadow = true;
+scene.add(ground);
 
 const game = {
     isOver: false
 };
 
-const background = new Sprite({
-    position: { x: 0, y: 0 },
-    width: canvas.width,
-    height: canvas.height,
-    color: '#222'
-});
-
 const player1 = new Fighter({
-    position: { x: 100, y: 0 },
+    position: { x: 100, y: 50 },
     velocity: { x: 0, y: 0 },
-    color: '#3b82f6',
+    color: 0x3b82f6,
     offset: { x: 60, y: 30 },
     isPlayer2: false
 });
+scene.add(player1.mesh);
 
 const player2 = new Fighter({
-    position: { x: 800, y: 0 },
+    position: { x: 800, y: 50 },
     velocity: { x: 0, y: 0 },
-    color: '#ef4444',
+    color: 0xef4444,
     offset: { x: -80, y: 30 },
     isPlayer2: true
 });
+scene.add(player2.mesh);
 
 const keys = {
     a: { pressed: false },
@@ -46,24 +74,19 @@ decreaseTimer();
 function animate() {
     window.requestAnimationFrame(animate);
     
-    // Sky
-    ctx.fillStyle = '#1e1e24';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    player1.update(50);
+    player2.update(50);
     
-    // Ground
-    ctx.fillStyle = '#4a4e69';
-    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
-
-    player1.update(ctx, canvas.height);
-    player2.update(ctx, canvas.height);
-    
-    if (game.isOver) return;
+    if (game.isOver) {
+        renderer.render(scene, camera);
+        return;
+    }
 
     player1.velocity.x = 0;
     if (!player1.dead && !player1.isHit && !player1.isBlocking) {
         if (keys.a.pressed && player1.position.x > 0) {
             player1.velocity.x = -5;
-        } else if (keys.d.pressed && player1.position.x < canvas.width - player1.width) {
+        } else if (keys.d.pressed && player1.position.x < width - player1.width) {
             player1.velocity.x = 5;
         }
     }
@@ -72,7 +95,7 @@ function animate() {
     if (!player2.dead && !player2.isHit && !player2.isBlocking) {
         if (keys.ArrowLeft.pressed && player2.position.x > 0) {
             player2.velocity.x = -5;
-        } else if (keys.ArrowRight.pressed && player2.position.x < canvas.width - player2.width) {
+        } else if (keys.ArrowRight.pressed && player2.position.x < width - player2.width) {
             player2.velocity.x = 5;
         }
     }
@@ -100,6 +123,8 @@ function animate() {
     if (player1.health <= 0 || player2.health <= 0) {
         determineWinner({ player1, player2, timerId });
     }
+
+    renderer.render(scene, camera);
 }
 
 animate();
@@ -115,7 +140,7 @@ window.addEventListener('keydown', (event) => {
             keys.a.pressed = true;
             break;
         case 'w':
-            if (player1.velocity.y === 0 && !player1.dead) player1.velocity.y = -15;
+            if (player1.position.y <= 50 && !player1.dead) player1.velocity.y = 15;
             break;
         case ' ':
             player1.attack();
@@ -128,7 +153,7 @@ window.addEventListener('keydown', (event) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp':
-            if (player2.velocity.y === 0 && !player2.dead) player2.velocity.y = -15;
+            if (player2.position.y <= 50 && !player2.dead) player2.velocity.y = 15;
             break;
         case 'Enter':
             player2.attack();

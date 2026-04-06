@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
+    <!-- Game Canvas (Replaced by Three.js) -->
+    <div id="game-container" style="position: relative; width: 1024px; height: 576px; margin: 0 auto; overflow: hidden;">
         <!-- UI Layer -->
         <div id="ui-layer">
             <!-- Player 1 Health -->
@@ -33,10 +34,10 @@
             <button id="restart-btn" style="display: none;">RESTART</button>
         </div>
 
-        <!-- Game Canvas -->
-        <canvas id="gameCanvas"></canvas>
+        <!-- Game Canvas will be injected here -->
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/classes.js"></script>
     <script src="js/game.js"></script>
