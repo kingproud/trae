@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <script>
+        try {
+            const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+            console.log("Success");
+        } catch (e) {
+            console.error("FAIL:", e);
+        }
+    </script>
+</body>
+</html>

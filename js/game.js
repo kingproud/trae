@@ -12,10 +12,16 @@ camera.position.set(512, 288, 800);
 camera.lookAt(512, 288, 0);
 
 // Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(width, height);
-renderer.shadowMap.enabled = true;
-container.appendChild(renderer.domElement);
+let renderer;
+try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+} catch (e) {
+    console.error("WebGL Error:", e);
+    container.innerHTML = `<div style="color:white; text-align:center; margin-top:200px;">WebGL is not supported in this environment.<br>${e.message}</div>`;
+}
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -73,6 +79,7 @@ decreaseTimer();
 
 function animate() {
     window.requestAnimationFrame(animate);
+    if (!renderer) return;
     
     player1.update(50);
     player2.update(50);
