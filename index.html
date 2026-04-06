@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Mecha Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- UI Layer -->
+        <div id="ui-layer">
+            <!-- Player 1 Health -->
+            <div class="health-container p1">
+                <div id="player1-health" class="health-bar p1-color"></div>
+            </div>
+            
+            <!-- Timer -->
+            <div id="timer">60</div>
+            
+            <!-- Player 2 Health -->
+            <div class="health-container p2">
+                <div id="player2-health" class="health-bar p2-color"></div>
+            </div>
+        </div>
+        
+        <!-- End Game Overlay -->
+        <div id="end-game-display">
+            <div id="end-message"></div>
+            <button id="restart-btn" style="display: none;">RESTART</button>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
